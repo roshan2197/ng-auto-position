@@ -9,6 +9,14 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
+    "paths": {
+      "ng-auto-position-2": [
+        "./dist/ng-auto-position-2"
+      ],
+      "ng-autoposition": [
+        "./dist/ng-autoposition"
+      ]
+    },
     "esModuleInterop": true,
     "sourceMap": true,
     "declaration": false,
