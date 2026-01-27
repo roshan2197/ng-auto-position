@@ -11,7 +11,7 @@ This directive is designed for cases where **Angular CDK Overlay is too heavy**,
 
 Try it directly in your browser:
 
-👉 [https://stackblitz.com/~/github.com/roshan2197/ng-auto-position](https://stackblitz.com/~/github.com/roshan2197/ng-auto-position)
+👉 [https://ngautoposition-jysw--4200--31fc58ec.local-credentialless.webcontainer.io/](https://ngautoposition-jysw--4200--31fc58ec.local-credentialless.webcontainer.io/)
 
 ---
 
