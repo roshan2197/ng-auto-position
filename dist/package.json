@@ -1,7 +1,8 @@
 {
   "name": "ng-auto-position",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Angular directive for auto positioning dropdowns and popovers",
+  "private": false,
   "dependencies": {
     "@angular/animations": "^17.3.0",
     "@angular/common": "^17.3.0",
@@ -51,7 +52,7 @@
     "type": "git",
     "url": "https://github.com/roshan2197/ng-auto-position"
   },
-  "homepage": "https://github.com/roshan2197/ng-auto-position",
+  "homepage": "https://ngautoposition-jysw--4200--31fc58ec.local-credentialless.webcontainer.io/",
   "module": "fesm2022/ng-auto-position.mjs",
   "typings": "index.d.ts",
   "exports": {
