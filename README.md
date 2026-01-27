@@ -1,8 +1,17 @@
 # **ng-auto-position**
 
+![npm](https://img.shields.io/npm/v/ng-auto-position)
+![downloads](https://img.shields.io/npm/dm/ng-auto-position)
+
 A lightweight **Angular standalone directive** that automatically positions dropdowns, popovers, and floating panels relative to a reference element, while correctly handling scrolling, resizing, viewport boundaries, and scroll locking.
 
 This directive is designed for cases where **Angular CDK Overlay is too heavy**, but you still need **reliable, production-grade positioning**.
+
+## 🔴 Live Demo
+
+Try it directly in your browser:
+
+👉 [https://stackblitz.com/~/github.com/roshan2197/ng-auto-position](https://stackblitz.com/~/github.com/roshan2197/ng-auto-position)
 
 ---
 
