@@ -9,7 +9,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "pack": "del-cli \"dist\" && ng-packagr -p ng-package.json && cd dist && npm pack",
-    "deploy": "ng build --base-href /ng-auto-position/ && npx angular-cli-ghpages --dir=docs/ng-auto-position/browser"
+    "deploy": "ng build --configuration production --output-path docs --base-href /ng-auto-position/ && npx angular-cli-ghpages --dir=docs/browser"
   },
   "private": false,
   "dependencies": {
