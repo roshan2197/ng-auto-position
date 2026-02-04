@@ -98,20 +98,24 @@ export class DemoComponent {}
 | debounceMs | number | 0 | Debounce delay for scroll/resize events. |
 | offset | number | 0 | Pixel gap between reference and popup. |
 | matchWidth | boolean | false | Match popup width to reference element width. |
-| placement | 'auto' \| 'top' \| 'bottom' | auto | Preferred placement direction. |
+| placement | 'auto' \| 'top' \| 'bottom' \| 'left' \| 'right' | auto | Preferred placement direction. |
 | viewportPadding | number | 4 | Minimum padding from viewport edges. |
+| trackScrollParents | boolean | true | Listen to scrollable parent containers. |
 | scrollableSelector | string | null | Inner element selector to limit height/enable scroll. |
 | hideScrollTargets | string[] | null | IDs or classes (e.g. ['body']) to hide scrollbars. |
 
 ---
 
-**Note**: If both `referenceElement` and `referenceElementId` are provided, `referenceElement` wins.
+**Note**: If both `referenceElement` and `referenceElementId` are provided, `referenceElement` wins.  
+Scroll-parent tracking runs only when `enableAutoReposition` is `true`.
+
+**Placement note**: `auto` chooses top or bottom only. Use `left` or `right` explicitly.
 
 ## **📤 Outputs**
 
 | Output | Type | Description |
 | :---- | :---- | :---- |
-| placementChange | 'top' \| 'bottom' | Emits the final placement after each update. |
+| placementChange | 'top' \| 'bottom' \| 'left' \| 'right' | Emits the final placement after each update. |
 
 ---
 
@@ -213,6 +217,35 @@ export class DemoComponent {}
 </div>
 ```
 
+### **7\. Scrollable Parent Containers**
+
+```html
+<div class="container-scroll">
+  <button #containerAnchor>Open inside container</button>
+
+  <div ngAutoPosition [referenceElement]="containerAnchor">
+    Menu content
+  </div>
+</div>
+```
+
+Scroll parents are detected automatically. If needed, you can disable this with
+`[trackScrollParents]="false"`.
+
+### **8\. Left/Right Placement**
+
+```html
+<button #leftBtn>Open left</button>
+<div ngAutoPosition [referenceElement]="leftBtn" placement="left">
+  Left placement
+</div>
+
+<button #rightBtn>Open right</button>
+<div ngAutoPosition [referenceElement]="rightBtn" placement="right">
+  Right placement
+</div>
+```
+
 ---
 
 ## **🧩 Advanced Examples**
@@ -270,6 +303,7 @@ HTML
 * **Reference is fully visible**: Popup is clamped to the viewport to prevent overflow on all sides.  
 * **Reference is partially visible**: Popup remains visible and clamped to the viewport.  
 * **Reference is outside viewport**: Popup moves with the reference and can go fully off-screen. It never "freezes" or sticks in mid-air.
+* **Scrollable containers**: Scroll parents are listened to by default so anchors inside panels/drawers stay in sync.
 
 ---
 

@@ -275,8 +275,14 @@
 
 .examples {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: 1fr;
   gap: 24px;
+}
+
+@media (min-width: 900px) {
+  .examples {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .example-panel {
@@ -285,6 +291,50 @@
   background: #fdf9f2;
   border: 1px dashed rgba(31, 29, 26, 0.2);
   margin-bottom: 16px;
+}
+
+.placement-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.placement-cell {
+  border-radius: 16px;
+  background: #fdf9f2;
+  border: 1px dashed rgba(31, 29, 26, 0.2);
+  padding: 16px;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.placement-label {
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #7a6b58;
+  font-weight: 600;
+}
+
+.placement-panel {
+  width: min(82vw, 220px);
+}
+
+@media (min-width: 700px) {
+  .placement-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .placement-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 .code-block {
@@ -345,6 +395,63 @@
   flex-direction: column;
   gap: 6px;
   max-height: 220px;
+}
+
+.container-scroll {
+  border-radius: 18px;
+  background: linear-gradient(140deg, #fdf9f2, #fffaf4);
+  border: 1px solid rgba(31, 29, 26, 0.12);
+  padding: 14px;
+  margin-bottom: 16px;
+  display: grid;
+  gap: 12px;
+}
+
+.container-caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #4a4035;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.container-pill {
+  background: rgba(31, 29, 26, 0.08);
+  color: #4a4035;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+}
+
+.container-frame {
+  height: 240px;
+  overflow: auto;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1px dashed rgba(31, 29, 26, 0.2);
+  padding: 16px;
+  display: grid;
+  gap: 18px;
+  align-content: start;
+  scrollbar-gutter: stable;
+}
+
+.scroll-spacer {
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7a6b58;
+  background: rgba(31, 29, 26, 0.04);
+  border-radius: 12px;
+  font-size: 0.95rem;
+}
+
+.container-anchor {
+  display: flex;
+  justify-content: center;
 }
 
 @media (max-width: 960px) {

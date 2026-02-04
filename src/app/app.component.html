@@ -148,12 +148,20 @@
     <div class="content-card">
       <h2>Core Inputs</h2>
       <ul class="input-list">
-        <li><strong>referenceElementId</strong> - ID of the anchor element.</li>
+        <li><strong>referenceElement</strong> - Direct anchor reference.</li>
+        <li><strong>referenceElementId</strong> - Anchor ID fallback.</li>
         <li>
           <strong>enableAutoReposition</strong> - Track scroll and resize.
         </li>
         <li><strong>offset</strong> - Gap between the anchor and panel.</li>
         <li><strong>matchWidth</strong> - Match panel width to anchor.</li>
+        <li>
+          <strong>placement</strong> - Preferred top/bottom/left/right placement.
+        </li>
+        <li><strong>viewportPadding</strong> - Edge padding while clamping.</li>
+        <li>
+          <strong>trackScrollParents</strong> - Listen to scrollable containers.
+        </li>
         <li><strong>scrollableSelector</strong> - Constrain inner scroll.</li>
         <li>
           <strong>hideScrollTargets</strong> - Hide scrollbars while open.
@@ -215,9 +223,132 @@
     </div>
 
     <div class="content-card">
+      <h2>Example: Placement Options</h2>
+      <p class="card-lead">
+        Force a specific direction with <code>placement</code>. These are
+        arranged in a single row on desktop.
+      </p>
+      <div class="placement-grid">
+        <div class="placement-cell">
+          <div class="placement-label">Top</div>
+          <button
+            #topExampleBtn
+            class="demo-button"
+            (click)="toggleTopExample(); $event.stopPropagation()"
+          >
+            Open top
+          </button>
+          @if (showTopExample) {
+            <div
+              ngAutoPosition
+              [referenceElement]="topExampleBtn"
+              placement="top"
+              [offset]="10"
+              class="menu-panel placement-panel"
+              (click)="$event.stopPropagation()"
+            >
+              <div class="menu-items">
+                <div class="menu-item">Top aligned</div>
+                <div class="menu-item">Clamped if needed</div>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="placement-cell">
+          <div class="placement-label">Bottom</div>
+          <button
+            #bottomExampleBtn
+            class="demo-button"
+            (click)="toggleBottomExample(); $event.stopPropagation()"
+          >
+            Open bottom
+          </button>
+          @if (showBottomExample) {
+            <div
+              ngAutoPosition
+              [referenceElement]="bottomExampleBtn"
+              placement="bottom"
+              [offset]="10"
+              class="menu-panel placement-panel"
+              (click)="$event.stopPropagation()"
+            >
+              <div class="menu-items">
+                <div class="menu-item">Bottom aligned</div>
+                <div class="menu-item">Viewport aware</div>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="placement-cell">
+          <div class="placement-label">Left</div>
+          <button
+            #leftExampleBtn
+            class="demo-button"
+            (click)="toggleLeftExample(); $event.stopPropagation()"
+          >
+            Open left
+          </button>
+          @if (showLeftExample) {
+            <div
+              ngAutoPosition
+              [referenceElement]="leftExampleBtn"
+              placement="left"
+              [offset]="10"
+              class="menu-panel placement-panel"
+              (click)="$event.stopPropagation()"
+            >
+              <div class="menu-items">
+                <div class="menu-item">Left aligned</div>
+                <div class="menu-item">Auto clamp</div>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="placement-cell">
+          <div class="placement-label">Right</div>
+          <button
+            #rightExampleBtn
+            class="demo-button"
+            (click)="toggleRightExample(); $event.stopPropagation()"
+          >
+            Open right
+          </button>
+          @if (showRightExample) {
+            <div
+              ngAutoPosition
+              [referenceElement]="rightExampleBtn"
+              placement="right"
+              [offset]="10"
+              class="menu-panel placement-panel"
+              (click)="$event.stopPropagation()"
+            >
+              <div class="menu-items">
+                <div class="menu-item">Right aligned</div>
+                <div class="menu-item">Auto clamp</div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+      <div class="code-block">
+        <pre><code>&lt;button #leftBtn&gt;Open left&lt;/button&gt;
+&lt;div
+  ngAutoPosition
+  [referenceElement]="leftBtn"
+  placement="left"
+&gt;
+  ...
+&lt;/div&gt;</code></pre>
+      </div>
+    </div>
+
+    <div class="content-card">
       <h2>Example: Scroll Playground</h2>
       <p class="card-lead">
-        Scroll the panel to see the overlay track the anchor. When the anchor
+        Scroll the page to see the overlay track the anchor. When the anchor
         leaves the viewport, the overlay follows it instead of freezing.
       </p>
       <div class="scroll-playground">
@@ -255,6 +386,59 @@
         <pre><code>&lt;div class="scroll-playground"&gt;
   &lt;button #scrollAnchor&gt;Anchor&lt;/button&gt;
   &lt;div ngAutoPosition [referenceElement]="scrollAnchor"&gt;...&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+      </div>
+    </div>
+
+    <div class="content-card">
+      <h2>Example: Scrollable Container</h2>
+      <p class="card-lead">
+        Anchors inside overflow containers still work because scroll parents
+        are tracked automatically.
+      </p>
+      <div class="container-scroll" (click)="$event.stopPropagation()">
+        <div class="container-caption">
+          Scrollable panel
+          <span class="container-pill">overflow: auto</span>
+        </div>
+        <div class="container-frame">
+          <div class="scroll-spacer">Scroll inside this panel.</div>
+          <div class="container-anchor">
+            <button
+              #containerAnchor
+              class="demo-button"
+              (click)="toggleContainer(); $event.stopPropagation()"
+            >
+              Open inside container
+            </button>
+            @if (showContainer) {
+              <div
+                ngAutoPosition
+                [referenceElement]="containerAnchor"
+                [offset]="10"
+                class="menu-panel"
+                (click)="$event.stopPropagation()"
+              >
+                <div class="menu-items">
+                  <div class="menu-item">Edit profile</div>
+                  <div class="menu-item">Share</div>
+                  <div class="menu-item">Archive</div>
+                </div>
+              </div>
+            }
+          </div>
+          <div class="scroll-spacer">More content below.</div>
+        </div>
+      </div>
+      <div class="code-block">
+        <pre><code>&lt;div class="container-scroll"&gt;
+  &lt;button #containerAnchor&gt;Open inside container&lt;/button&gt;
+  &lt;div
+    ngAutoPosition
+    [referenceElement]="containerAnchor"
+  &gt;
+    ...
+  &lt;/div&gt;
 &lt;/div&gt;</code></pre>
       </div>
     </div>

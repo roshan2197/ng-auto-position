@@ -60,11 +60,20 @@ export class NgAutoPositionElementDirective implements AfterViewInit {
   /**
    * Preferred placement.
    * - 'auto' chooses top/bottom based on available space.
+   * - 'left'/'right' are explicit.
    */
-  placement = input<'auto' | 'top' | 'bottom'>('auto');
+  placement = input<'auto' | 'top' | 'bottom' | 'left' | 'right'>('auto');
 
   /** Minimum padding from the viewport edges when clamping. */
   viewportPadding = input<number>(4);
+
+  /**
+   * Listen to scroll events on scrollable parents of the reference element.
+   * Useful for overlays inside scrollable containers (drawers, panels).
+   *
+   * Default: true
+   */
+  trackScrollParents = input<boolean>(true);
 
   /**
    * Optional selector for inner scrollable content
@@ -94,7 +103,9 @@ export class NgAutoPositionElementDirective implements AfterViewInit {
   /**
    * Emits the final placement after each update.
    */
-  @Output() placementChange = new EventEmitter<'top' | 'bottom'>();
+  @Output() placementChange = new EventEmitter<
+    'top' | 'bottom' | 'left' | 'right'
+  >();
 
   /**
    * Hide overlay until positioned to avoid flicker.
@@ -102,7 +113,7 @@ export class NgAutoPositionElementDirective implements AfterViewInit {
   @HostBinding('style.visibility')
   visibility: 'hidden' | 'visible' = 'hidden';
 
-  private lastPlacement: 'top' | 'bottom' | null = null;
+  private lastPlacement: 'top' | 'bottom' | 'left' | 'right' | null = null;
 
   ngAfterViewInit(): void {
     const overlay = this.el.nativeElement;
@@ -115,9 +126,17 @@ export class NgAutoPositionElementDirective implements AfterViewInit {
     const reference = this.getReferenceElement(overlay);
     if (reference) ro.observe(reference);
 
-    // Conditionally listen to scroll + resize
+    // Conditionally listen to scroll + resize (including scrollable parents)
     if (this.enableAutoReposition()) {
-      merge(fromEvent(window, 'scroll'), fromEvent(window, 'resize'))
+      const scrollParents =
+        reference && this.trackScrollParents()
+          ? this.getScrollableParents(reference)
+          : [];
+      const scrollStreams = scrollParents.map((target) =>
+        fromEvent(target, 'scroll'),
+      );
+
+      merge(fromEvent(window, 'scroll'), fromEvent(window, 'resize'), ...scrollStreams)
         .pipe(
           debounceTime(this.debounceMs()),
           takeUntilDestroyed(this.destroyRef),
@@ -177,12 +196,24 @@ export class NgAutoPositionElementDirective implements AfterViewInit {
     if (preferredPlacement === 'top') openOnTop = true;
     if (preferredPlacement === 'bottom') openOnTop = false;
 
-    // --- base positioning relative to reference ---
-    let top = openOnTop
-      ? refRect.top - overlayRect.height - this.offset()
-      : refRect.bottom + this.offset();
-
+    let top = refRect.top;
     let left = refRect.left;
+    let finalPlacement: 'top' | 'bottom' | 'left' | 'right';
+
+    if (preferredPlacement === 'left' || preferredPlacement === 'right') {
+      finalPlacement = preferredPlacement;
+      left =
+        preferredPlacement === 'left'
+          ? refRect.left - overlayRect.width - this.offset()
+          : refRect.right + this.offset();
+      top = refRect.top;
+    } else {
+      finalPlacement = openOnTop ? 'top' : 'bottom';
+      top = openOnTop
+        ? refRect.top - overlayRect.height - this.offset()
+        : refRect.bottom + this.offset();
+      left = refRect.left;
+    }
 
     const fullyOut = this.isReferenceFullyOut(refRect);
 
@@ -203,7 +234,6 @@ export class NgAutoPositionElementDirective implements AfterViewInit {
     overlay.style.top = `${top}px`;
     overlay.style.left = `${left}px`;
 
-    const finalPlacement = openOnTop ? 'top' : 'bottom';
     if (this.lastPlacement !== finalPlacement) {
       this.lastPlacement = finalPlacement;
       this.placementChange.emit(finalPlacement);
@@ -215,7 +245,13 @@ export class NgAutoPositionElementDirective implements AfterViewInit {
         this.scrollableSelector()!,
       ) as HTMLElement;
       if (inner) {
-        const maxSpace = openOnTop ? spaceAbove : spaceBelow;
+        const padding = Math.max(0, this.viewportPadding());
+        const maxSpace =
+          finalPlacement === 'left' || finalPlacement === 'right'
+            ? viewportH - padding * 2
+            : openOnTop
+              ? spaceAbove
+              : spaceBelow;
         inner.style.maxHeight = `${Math.min(maxSpace - 10, viewportH * 0.9)}px`;
         inner.style.overflowY = 'auto';
       }
@@ -240,5 +276,24 @@ export class NgAutoPositionElementDirective implements AfterViewInit {
 
     const id = this.referenceElementId();
     return id ? document.getElementById(id) : overlay.parentElement;
+  }
+
+  /**
+   * Finds scrollable ancestors by checking overflow styles.
+   */
+  private getScrollableParents(element: HTMLElement): HTMLElement[] {
+    const scrollParents: HTMLElement[] = [];
+    let current = element.parentElement;
+
+    while (current && current !== document.body && current !== document.documentElement) {
+      const style = getComputedStyle(current);
+      const overflow = `${style.overflow} ${style.overflowY} ${style.overflowX}`;
+      if (/(auto|scroll|overlay)/.test(overflow)) {
+        scrollParents.push(current);
+      }
+      current = current.parentElement;
+    }
+
+    return scrollParents;
   }
 }

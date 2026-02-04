@@ -15,7 +15,12 @@ export class AppComponent {
   showPopover = false;
   showInline = false;
   showSticky = false;
-  menuPlacement: 'top' | 'bottom' | null = null;
+  showContainer = false;
+  showTopExample = false;
+  showBottomExample = false;
+  showLeftExample = false;
+  showRightExample = false;
+  menuPlacement: 'top' | 'bottom' | 'left' | 'right' | null = null;
 
   menuItems = [
     'Account settings',
@@ -41,10 +46,35 @@ export class AppComponent {
     this.showSticky = !this.showSticky;
   }
 
+  toggleContainer(): void {
+    this.showContainer = !this.showContainer;
+  }
+
+  toggleTopExample(): void {
+    this.showTopExample = !this.showTopExample;
+  }
+
+  toggleBottomExample(): void {
+    this.showBottomExample = !this.showBottomExample;
+  }
+
+  toggleLeftExample(): void {
+    this.showLeftExample = !this.showLeftExample;
+  }
+
+  toggleRightExample(): void {
+    this.showRightExample = !this.showRightExample;
+  }
+
   closeAll(): void {
     this.showMenu = false;
     this.showPopover = false;
     this.showInline = false;
     this.showSticky = false;
+    this.showContainer = false;
+    this.showTopExample = false;
+    this.showBottomExample = false;
+    this.showLeftExample = false;
+    this.showRightExample = false;
   }
 }
