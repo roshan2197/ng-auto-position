@@ -7,6 +7,7 @@ import { NgAutoPositionElementDirective } from './ng-auto-position/ng-auto-posit
   standalone: true,
   imports: [CommonModule, NgAutoPositionElementDirective],
   templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
   title = 'ng-auto-position';
@@ -17,8 +18,8 @@ export class AppComponent {
 
   menuItems = [
     'Account settings',
-    'Billing & plan',
-    'Team access',
+    'Billing & plans',
+    'Team permissions',
     'Keyboard shortcuts',
     'Sign out',
   ];
