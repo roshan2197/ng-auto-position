@@ -21,11 +21,34 @@ This directive is designed for cases where **Angular CDK Overlay is too heavy**,
 
 ## **📦 Installation**
 
+```bash
 npm install ng-auto-position
+```
+
+```bash
+pnpm add ng-auto-position
+```
+
+```bash
+yarn add ng-auto-position
+```
 
 ---
 
-## **📌 Basic Usage**
+## **🧪 Demo**
+
+Run locally to see the live positioning demos and scroll playground.
+
+```bash
+npm install
+npm start
+```
+
+Open the dev server URL shown in your terminal.
+
+---
+
+## **📌 Quick Start**
 
 ### **1\. Component Template**
 
@@ -122,14 +145,13 @@ HTML
 ```
 <button id="actionsBtn">Actions</button>
 
-<div  
-  autoPositionElement  
-  referenceElementId="actionsBtn"  
-  scrollableSelector=".menu-items"  
-  class="dropdown"  
->  
-  <div class="menu-items">  
-    </div>  
+<div
+  ngAutoPosition
+  referenceElementId="actionsBtn"
+  scrollableSelector=".menu-items"
+  class="dropdown"
+>
+  <div class="menu-items"></div>
 </div>
 ```
 
@@ -148,13 +170,78 @@ Prevents the user from scrolling the background while the popup is active.
 HTML  
 
 ```html
-<div  
-  autoPositionElement  
-  referenceElementId="menuBtn"  
-  [hideScrollTargets]="['body', '.layout-container']"  
-  class="dropdown"  
->  
-  Menu content  
+<div
+  ngAutoPosition
+  referenceElementId="menuBtn"
+  [hideScrollTargets]="['body', '.layout-container']"
+  class="dropdown"
+>
+  Menu content
+</div>
+```
+
+---
+
+## **✅ Common Recipes**
+
+### **1\. Menu With Internal Scroll**
+
+```html
+<button id="menuBtn">Open menu</button>
+
+<div
+  ngAutoPosition
+  referenceElementId="menuBtn"
+  [matchWidth]="true"
+  [scrollableSelector]="'.menu-items'"
+  [offset]="8"
+>
+  <div class="menu-items">
+    <div class="menu-item">Profile</div>
+    <div class="menu-item">Billing</div>
+    <div class="menu-item">Workspace</div>
+    <div class="menu-item">Settings</div>
+    <div class="menu-item">Sign out</div>
+  </div>
+</div>
+```
+
+```css
+.menu-items {
+  overflow-y: auto;
+  max-height: 240px;
+}
+```
+
+### **2\. Scroll-Lock The Background**
+
+```html
+<button id="sheetBtn">Open sheet</button>
+
+<div
+  ngAutoPosition
+  referenceElementId="sheetBtn"
+  [hideScrollTargets]="['body', '.app-shell']"
+>
+  Content
+</div>
+```
+
+### **3\. Auto-Width Popover**
+
+```html
+<button id="helpBtn">Help</button>
+<div ngAutoPosition referenceElementId="helpBtn" [matchWidth]="true">
+  Helpful content
+</div>
+```
+
+### **4\. Scroll Tracking (Window Scroll)**
+
+```html
+<button id="scrollAnchor">Anchor</button>
+<div ngAutoPosition referenceElementId="scrollAnchor" [offset]="12">
+  This stays attached while the page scrolls.
 </div>
 ```
 
@@ -179,11 +266,11 @@ HTML
 TypeScript  
 
 ```typescript
-import { AutoPositionElementDirective } from '@roshan-ng/ng-auto-position';
+import { NgAutoPositionElementDirective } from 'ng-auto-position';
 
 @Component({  
   standalone: true,  
-  imports: [AutoPositionElementDirective],  
+  imports: [NgAutoPositionElementDirective],  
 })  
 export class DemoComponent {}
 ```
@@ -196,5 +283,5 @@ MIT © Roshan
 
 ## **🔗 Links**
 
-* **npm**: [https://www.npmjs.com/package/ng-auto-position](https://www.npmjs.com/package/@roshan-ng/ng-auto-position)  
-* **GitHub**: [https://github.com/roshan2197/ng-auto-position](https://github.com/roshan/ng-auto-position)
+* **npm**: [https://www.npmjs.com/package/ng-auto-position](https://www.npmjs.com/package/ng-auto-position)  
+* **GitHub**: [https://github.com/roshan2197/ng-auto-position](https://github.com/roshan2197/ng-auto-position)
