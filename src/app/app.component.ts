@@ -7,7 +7,6 @@ import { NgAutoPositionElementDirective } from './ng-auto-position/ng-auto-posit
   standalone: true,
   imports: [CommonModule, NgAutoPositionElementDirective],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
 })
 export class AppComponent {
   title = 'ng-auto-position';
