@@ -3,7 +3,9 @@ import {
   DestroyRef,
   Directive,
   ElementRef,
+  EventEmitter,
   HostBinding,
+  Output,
   inject,
   input,
 } from '@angular/core';
@@ -35,6 +37,12 @@ export class NgAutoPositionElementDirective implements AfterViewInit {
   private readonly destroyRef = inject(DestroyRef);
 
   /**
+   * Direct reference to the anchor element.
+   * If provided, this takes priority over referenceElementId.
+   */
+  referenceElement = input<HTMLElement | ElementRef<HTMLElement> | null>(null);
+
+  /**
    * ID of the reference element.
    * If not provided, parentElement is used.
    */
@@ -48,6 +56,15 @@ export class NgAutoPositionElementDirective implements AfterViewInit {
 
   /** Match overlay width to reference width */
   matchWidth = input<boolean>(false);
+
+  /**
+   * Preferred placement.
+   * - 'auto' chooses top/bottom based on available space.
+   */
+  placement = input<'auto' | 'top' | 'bottom'>('auto');
+
+  /** Minimum padding from the viewport edges when clamping. */
+  viewportPadding = input<number>(4);
 
   /**
    * Optional selector for inner scrollable content
@@ -75,10 +92,17 @@ export class NgAutoPositionElementDirective implements AfterViewInit {
   hideScrollTargets = input<string[] | null>(null);
 
   /**
+   * Emits the final placement after each update.
+   */
+  @Output() placementChange = new EventEmitter<'top' | 'bottom'>();
+
+  /**
    * Hide overlay until positioned to avoid flicker.
    */
   @HostBinding('style.visibility')
   visibility: 'hidden' | 'visible' = 'hidden';
+
+  private lastPlacement: 'top' | 'bottom' | null = null;
 
   ngAfterViewInit(): void {
     const overlay = this.el.nativeElement;
@@ -145,8 +169,13 @@ export class NgAutoPositionElementDirective implements AfterViewInit {
     const spaceAbove = refRect.top;
     const spaceBelow = viewportH - refRect.bottom;
 
-    const openOnTop =
+    let openOnTop =
       overlayRect.height > spaceBelow && spaceAbove >= overlayRect.height;
+
+    // Placement override (user-specified preference)
+    const preferredPlacement = this.placement();
+    if (preferredPlacement === 'top') openOnTop = true;
+    if (preferredPlacement === 'bottom') openOnTop = false;
 
     // --- base positioning relative to reference ---
     let top = openOnTop
@@ -161,8 +190,11 @@ export class NgAutoPositionElementDirective implements AfterViewInit {
       // ✅ NORMAL MODE (reference at least partially visible)
       // Clamp to viewport
 
-      top = Math.min(top, viewportH - overlayRect.height - 4);
-      left = Math.min(left, viewportW - overlayRect.width - 4);
+      const padding = Math.max(0, this.viewportPadding());
+      top = Math.min(top, viewportH - overlayRect.height - padding);
+      top = Math.max(top, padding);
+      left = Math.min(left, viewportW - overlayRect.width - padding);
+      left = Math.max(left, padding);
     }
     // else: ✅ FOLLOW MODE (reference fully out of viewport)
     // do NOT clamp → let popup go offscreen naturally
@@ -170,6 +202,12 @@ export class NgAutoPositionElementDirective implements AfterViewInit {
 
     overlay.style.top = `${top}px`;
     overlay.style.left = `${left}px`;
+
+    const finalPlacement = openOnTop ? 'top' : 'bottom';
+    if (this.lastPlacement !== finalPlacement) {
+      this.lastPlacement = finalPlacement;
+      this.placementChange.emit(finalPlacement);
+    }
 
     // Optional inner scroll container handling
     if (this.scrollableSelector()) {
@@ -193,6 +231,13 @@ export class NgAutoPositionElementDirective implements AfterViewInit {
    * Resolves the reference element.
    */
   private getReferenceElement(overlay: HTMLElement): HTMLElement | null {
+    const directRef = this.referenceElement();
+    if (directRef) {
+      return directRef instanceof ElementRef
+        ? directRef.nativeElement
+        : directRef;
+    }
+
     const id = this.referenceElementId();
     return id ? document.getElementById(id) : overlay.parentElement;
   }

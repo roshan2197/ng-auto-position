@@ -153,6 +153,16 @@
   position: relative;
 }
 
+.placement-pill {
+  align-self: flex-start;
+  background: rgba(29, 25, 20, 0.08);
+  color: #4a4035;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+}
+
 .demo-button {
   border: none;
   background: #1d1914;

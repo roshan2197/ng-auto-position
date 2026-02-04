@@ -15,6 +15,7 @@ export class AppComponent {
   showPopover = false;
   showInline = false;
   showSticky = false;
+  menuPlacement: 'top' | 'bottom' | null = null;
 
   menuItems = [
     'Account settings',

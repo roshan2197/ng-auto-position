@@ -58,7 +58,7 @@
         <div class="demo-body">
           <div class="demo-row">
             <button
-              id="menuButton"
+              #menuButton
               class="demo-button"
               (click)="toggleMenu(); $event.stopPropagation()"
             >
@@ -67,11 +67,13 @@
             @if (showMenu) {
               <div
                 ngAutoPosition
-                referenceElementId="menuButton"
+                [referenceElement]="menuButton"
                 [matchWidth]="true"
                 [scrollableSelector]="'.menu-items'"
                 [offset]="10"
+                [viewportPadding]="12"
                 class="menu-panel"
+                (placementChange)="menuPlacement = $event"
                 (click)="$event.stopPropagation()"
               >
                 <div class="menu-items">
@@ -81,11 +83,14 @@
                 </div>
               </div>
             }
+            <div class="placement-pill">
+              Placement: {{ menuPlacement ?? 'auto' }}
+            </div>
           </div>
 
           <div class="demo-row">
             <button
-              id="infoButton"
+              #infoButton
               class="demo-button ghost"
               (click)="togglePopover(); $event.stopPropagation()"
             >
@@ -94,8 +99,9 @@
             @if (showPopover) {
               <div
                 ngAutoPosition
-                referenceElementId="infoButton"
+                [referenceElement]="infoButton"
                 [offset]="12"
+                placement="bottom"
                 class="popover"
                 (click)="$event.stopPropagation()"
               >
@@ -127,10 +133,10 @@
             export class AppModule &#123; &#125;</code></pre>
       </div> -->
       <div class="code-block">
-        <pre><code>&lt;button id="menuBtn"&gt;Menu&lt;/button&gt;
+        <pre><code>&lt;button #menuBtn&gt;Menu&lt;/button&gt;
 &lt;div
   ngAutoPosition
-  referenceElementId="menuBtn"
+  [referenceElement]="menuBtn"
   [offset]="8"
   [matchWidth]="true"
 &gt;
@@ -165,7 +171,7 @@
       </p>
       <div class="example-panel">
         <button
-          id="inlineMenuButton"
+          #inlineMenuButton
           class="demo-button"
           (click)="toggleInline(); $event.stopPropagation()"
         >
@@ -174,7 +180,7 @@
         @if (showInline) {
           <div
             ngAutoPosition
-            referenceElementId="inlineMenuButton"
+            [referenceElement]="inlineMenuButton"
             [scrollableSelector]="'.long-menu'"
             [matchWidth]="true"
             [offset]="10"
@@ -196,10 +202,10 @@
         }
       </div>
       <div class="code-block">
-        <pre><code>&lt;button id="inlineMenuButton"&gt;Toggle long menu&lt;/button&gt;
+        <pre><code>&lt;button #inlineMenuButton&gt;Toggle long menu&lt;/button&gt;
 &lt;div
   ngAutoPosition
-  referenceElementId="inlineMenuButton"
+  [referenceElement]="inlineMenuButton"
   [scrollableSelector]="'.long-menu'"
   [matchWidth]="true"
 &gt;
@@ -220,7 +226,7 @@
         </div>
         <div class="scroll-step anchor-zone">
           <button
-            id="scrollAnchor"
+            #scrollAnchor
             class="demo-button ghost"
             (click)="toggleSticky(); $event.stopPropagation()"
           >
@@ -229,7 +235,7 @@
           @if (showSticky) {
             <div
               ngAutoPosition
-              referenceElementId="scrollAnchor"
+              [referenceElement]="scrollAnchor"
               [offset]="12"
               class="popover"
               (click)="$event.stopPropagation()"
@@ -247,8 +253,8 @@
       </div>
       <div class="code-block">
         <pre><code>&lt;div class="scroll-playground"&gt;
-  &lt;button id="scrollAnchor"&gt;Anchor&lt;/button&gt;
-  &lt;div ngAutoPosition referenceElementId="scrollAnchor"&gt;...&lt;/div&gt;
+  &lt;button #scrollAnchor&gt;Anchor&lt;/button&gt;
+  &lt;div ngAutoPosition [referenceElement]="scrollAnchor"&gt;...&lt;/div&gt;
 &lt;/div&gt;</code></pre>
       </div>
     </div>
