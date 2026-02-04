@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Spline+Sans+Mono:wght@500;600&display=swap');
+
+:root {
+  color-scheme: light;
+  font-family: 'Space Grotesk', 'Avenir Next', 'Segoe UI', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(
+      circle at top left,
+      rgba(255, 230, 160, 0.45),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 90% 0%,
+      rgba(129, 195, 248, 0.35),
+      transparent 50%
+    ),
+    #f9f4ee;
+  color: #1f1d1a;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
