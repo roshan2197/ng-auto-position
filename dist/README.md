@@ -56,66 +56,32 @@ Apply the directive and provide the ID of the element it should anchor to.
 
 HTML  
 
-``` html
+```html
+<button id="menuBtn">Menu</button>
+
 <div
-  class="flex flex-row"
-  style="
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    left: 100vw;
-    top: 100vh;
-    height: 100vh;
-    width: 200vw;
-    padding: 700px;
-  "
+  ngAutoPosition
+  referenceElementId="menuBtn"
+  [offset]="8"
+  [matchWidth]="true"
 >
-  <div>
-    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-  </div>
-  <div style="height: fit-content">
-    <button style="padding: 4px; border: 2px solid" (click)="toggle()">
-      Toggle
-    </button>
-    @if (show) {
-      <div
-        ngAutoPosition
-        style="
-          width: 200px;
-          height: 200px;
-          border: 1px solid;
-          background-color: white;
-        "
-      ></div>
-    }
-  </div>
-  <div>
-    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-  </div>
+  Menu content
 </div>
 ```
 
-Typescript
+TypeScript
 
 ```typescript
-import { NgAutoPositionElementDirective } from '../ng-auto-position.directive';
-import { CommonModule } from '@angular/common';
+import { NgAutoPositionElementDirective } from 'ng-auto-position';
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'ng-auto-position-test',
+  selector: 'demo',
   standalone: true,
-  imports: [CommonModule, NgAutoPositionElementDirective],
-  templateUrl: './ng-autoposition-test.component.html',
+  imports: [NgAutoPositionElementDirective],
+  templateUrl: './demo.component.html',
 })
-export class NgAutoPositionTestComponent {
-  show: boolean = false;
-
-  toggle() {
-    this.show = !this.show;
-  }
-}
-
+export class DemoComponent {}
 ```
 
 ---
@@ -134,54 +100,6 @@ export class NgAutoPositionTestComponent {
 
 ---
 
-## **🧩 Advanced Examples**
-
-### **1\. Dropdown with internal scrolling**
-
-Automatically constrains height and enables internal scrolling if the viewport is too small.
-
-HTML  
-
-```
-<button id="actionsBtn">Actions</button>
-
-<div
-  ngAutoPosition
-  referenceElementId="actionsBtn"
-  scrollableSelector=".menu-items"
-  class="dropdown"
->
-  <div class="menu-items"></div>
-</div>
-```
-
-CSS  
-
-```css
-.menu-items {  
-  overflow-y: auto;  
-}
-```
-
-### **2\. Lock background scrolling**
-
-Prevents the user from scrolling the background while the popup is active.
-
-HTML  
-
-```html
-<div
-  ngAutoPosition
-  referenceElementId="menuBtn"
-  [hideScrollTargets]="['body', '.layout-container']"
-  class="dropdown"
->
-  Menu content
-</div>
-```
-
----
-
 ## **✅ Common Recipes**
 
 ### **1\. Menu With Internal Scroll**
@@ -197,11 +115,11 @@ HTML
   [offset]="8"
 >
   <div class="menu-items">
-    <div class="menu-item">Profile</div>
-    <div class="menu-item">Billing</div>
-    <div class="menu-item">Workspace</div>
-    <div class="menu-item">Settings</div>
-    <div class="menu-item">Sign out</div>
+    <div class="menu-item">Account settings and profile preferences</div>
+    <div class="menu-item">Billing, invoices, and subscription plan</div>
+    <div class="menu-item">Team access and member permissions</div>
+    <div class="menu-item">Keyboard shortcuts and productivity tips</div>
+    <div class="menu-item">Security, sessions, and sign out</div>
   </div>
 </div>
 ```
@@ -210,6 +128,13 @@ HTML
 .menu-items {
   overflow-y: auto;
   max-height: 240px;
+}
+
+.menu-item {
+  line-height: 1.35;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 ```
 
@@ -247,6 +172,54 @@ HTML
 
 ---
 
+## **🧩 Advanced Examples**
+
+### **1\. Dropdown with internal scrolling**
+
+Automatically constrains height and enables internal scrolling if the viewport is too small.
+
+HTML  
+
+```html
+<button id="actionsBtn">Actions</button>
+
+<div
+  ngAutoPosition
+  referenceElementId="actionsBtn"
+  scrollableSelector=".menu-items"
+  class="dropdown"
+>
+  <div class="menu-items"></div>
+</div>
+```
+
+CSS  
+
+```css
+.menu-items {
+  overflow-y: auto;
+}
+```
+
+### **2\. Lock background scrolling**
+
+Prevents the user from scrolling the background while the popup is active.
+
+HTML  
+
+```html
+<div
+  ngAutoPosition
+  referenceElementId="menuBtn"
+  [hideScrollTargets]="['body', '.layout-container']"
+  class="dropdown"
+>
+  Menu content
+</div>
+```
+
+---
+
 ## **🧠 Positioning Behavior Explained**
 
 * **Reference is fully visible**: Popup is clamped to the viewport to prevent overflow on all sides.  
@@ -260,20 +233,6 @@ HTML
 | Angular Version | Supported |
 | :---- | :---- |
 | 16+ | ✅ |
-
-### **Standalone Import Example**
-
-TypeScript  
-
-```typescript
-import { NgAutoPositionElementDirective } from 'ng-auto-position';
-
-@Component({  
-  standalone: true,  
-  imports: [NgAutoPositionElementDirective],  
-})  
-export class DemoComponent {}
-```
 
 ---
 

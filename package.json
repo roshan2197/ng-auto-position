@@ -1,6 +1,6 @@
 {
   "name": "ng-auto-position",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Angular directive for auto positioning dropdowns and popovers",
   "scripts": {
     "ng": "ng",
